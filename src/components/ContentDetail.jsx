@@ -47,9 +47,29 @@ export default function ContentDetail({ content, onClose }) {
               <span className="text-sm text-gray-600">Date:</span>
               <span className="ml-2 text-sm font-medium text-gray-900">{formatDate(content.date)}</span>
             </div>
+            {content.sentiment && (
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                content.sentiment === 'positive' ? 'bg-green-100 text-green-800' :
+                content.sentiment === 'negative' ? 'bg-red-100 text-red-800' :
+                'bg-gray-100 text-gray-800'
+              }`}>
+                {content.sentiment}
+                {content.sentimentConfidence > 0 && ` (${content.sentimentConfidence}%)`}
+              </span>
+            )}
             <span className={`px-3 py-1 rounded-full text-sm font-medium ${getTypeColor(content.contentType)}`}>
               {content.contentType || 'article'}
             </span>
+            {content.timeframe && (
+              <span className="px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                {content.timeframe}
+              </span>
+            )}
+            {content.conviction && (
+              <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                {content.conviction} conviction
+              </span>
+            )}
           </div>
 
           <div className="mb-4">
@@ -64,6 +84,22 @@ export default function ContentDetail({ content, onClose }) {
               <h3 className="text-sm font-semibold text-gray-700 mb-2">Extracted Text:</h3>
               <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                 <p className="text-gray-800 whitespace-pre-wrap">{content.extractedText}</p>
+              </div>
+            </div>
+          )}
+
+          {content.themes && content.themes.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-700 mb-2">Macro Themes:</h3>
+              <div className="flex flex-wrap gap-2">
+                {content.themes.map((theme) => (
+                  <span
+                    key={theme}
+                    className="px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800"
+                  >
+                    {theme}
+                  </span>
+                ))}
               </div>
             </div>
           )}

@@ -11,6 +11,15 @@ export default function ContentCard({ content, onClick }) {
     return colors[type] || 'bg-gray-100 text-gray-800';
   };
 
+  const getSentimentColor = (sentiment) => {
+    const colors = {
+      positive: 'bg-green-100 text-green-800',
+      negative: 'bg-red-100 text-red-800',
+      neutral: 'bg-gray-100 text-gray-800',
+    };
+    return colors[sentiment] || colors.neutral;
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'No date';
     const date = new Date(dateString);
@@ -30,9 +39,16 @@ export default function ContentCard({ content, onClick }) {
         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
           {content.title || 'Untitled'}
         </h3>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ml-2 flex-shrink-0 ${getTypeColor(content.contentType)}`}>
-          {content.contentType || 'article'}
-        </span>
+        <div className="flex gap-1 flex-shrink-0 ml-2">
+          {content.sentiment && (
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSentimentColor(content.sentiment)}`}>
+              {content.sentiment}
+            </span>
+          )}
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(content.contentType)}`}>
+            {content.contentType || 'article'}
+          </span>
+        </div>
       </div>
       
       <div className="mb-3">
@@ -46,23 +62,37 @@ export default function ContentCard({ content, onClick }) {
         </p>
       )}
 
-      {content.entities && content.entities.length > 0 && (
-        <div className="flex flex-wrap gap-1 mt-2">
-          {content.entities.slice(0, 3).map((entity) => (
-            <span
-              key={entity.id}
-              className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded"
-            >
-              {entity.name}
-            </span>
-          ))}
-          {content.entities.length > 3 && (
-            <span className="text-xs px-2 py-0.5 text-gray-500">
-              +{content.entities.length - 3} more
-            </span>
-          )}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-1 mt-2">
+        {content.themes && content.themes.length > 0 && (
+          <>
+            {content.themes.slice(0, 2).map((theme) => (
+              <span
+                key={theme}
+                className="text-xs px-2 py-0.5 bg-orange-100 text-orange-700 rounded"
+              >
+                {theme}
+              </span>
+            ))}
+          </>
+        )}
+        {content.entities && content.entities.length > 0 && (
+          <>
+            {content.entities.slice(0, 2).map((entity) => (
+              <span
+                key={entity.id}
+                className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded"
+              >
+                {entity.name}
+              </span>
+            ))}
+          </>
+        )}
+        {((content.themes && content.themes.length > 2) || (content.entities && content.entities.length > 2)) && (
+          <span className="text-xs px-2 py-0.5 text-gray-500">
+            +{((content.themes?.length || 0) + (content.entities?.length || 0)) - 2} more
+          </span>
+        )}
+      </div>
     </div>
   );
 }
