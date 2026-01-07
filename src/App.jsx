@@ -9,6 +9,7 @@ import KnowledgeGraph from './components/KnowledgeGraph';
 import SentimentAggregation from './components/SentimentAggregation';
 import NarrativeClusters from './components/NarrativeClusters';
 import MarketSentimentDashboard from './components/MarketSentimentDashboard';
+import NarrativeIntelligenceView from './components/NarrativeIntelligenceView';
 import { loadContent, saveContent, loadSources, saveSources, generateId } from './utils/storage';
 
 function App() {
@@ -18,8 +19,12 @@ function App() {
   const [selectedSource, setSelectedSource] = useState(null);
   const [editingSource, setEditingSource] = useState(null);
   const [showSourceForm, setShowSourceForm] = useState(false);
-  const [activeView, setActiveView] = useState('dashboard'); // 'dashboard', 'content', 'sources', 'graph', 'sentiment', 'clusters'
+  const [activeView, setActiveView] = useState('dashboard'); // 'dashboard', 'content', 'narratives', 'sources', 'graph', 'sentiment', 'clusters'
   const [filterSourceId, setFilterSourceId] = useState('');
+  const [invalidations, setInvalidations] = useState(() => {
+    const stored = localStorage.getItem('makro_invalidations');
+    return stored ? JSON.parse(stored) : [];
+  });
   const [filters, setFilters] = useState({
     sentiment: [],
     theme: [],
@@ -49,6 +54,11 @@ function App() {
       saveSources(sources);
     }
   }, [sources]);
+
+  // Save invalidations to localStorage
+  useEffect(() => {
+    localStorage.setItem('makro_invalidations', JSON.stringify(invalidations));
+  }, [invalidations]);
 
   const handleAddContent = (formData) => {
     const newContent = {
@@ -200,6 +210,16 @@ function App() {
               Clusters
             </button>
             <button
+              onClick={() => setActiveView('narratives')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeView === 'narratives'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Narratives
+            </button>
+            <button
               onClick={() => setActiveView('sources')}
               className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeView === 'sources'
@@ -309,6 +329,16 @@ function App() {
 
         {activeView === 'clusters' && (
           <NarrativeClusters content={content} onCardClick={handleCardClick} />
+        )}
+
+        {activeView === 'narratives' && (
+          <NarrativeIntelligenceView
+            content={content}
+            sources={sources}
+            onContentClick={handleCardClick}
+            invalidations={invalidations}
+            onInvalidationsUpdate={setInvalidations}
+          />
         )}
 
         {activeView === 'sources' && (
