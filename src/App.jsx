@@ -8,6 +8,7 @@ import SourceList from './components/SourceList';
 import KnowledgeGraph from './components/KnowledgeGraph';
 import SentimentAggregation from './components/SentimentAggregation';
 import NarrativeClusters from './components/NarrativeClusters';
+import MarketSentimentDashboard from './components/MarketSentimentDashboard';
 import { loadContent, saveContent, loadSources, saveSources, generateId } from './utils/storage';
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
   const [selectedSource, setSelectedSource] = useState(null);
   const [editingSource, setEditingSource] = useState(null);
   const [showSourceForm, setShowSourceForm] = useState(false);
-  const [activeView, setActiveView] = useState('content'); // 'content', 'sources', 'graph', 'sentiment', 'clusters'
+  const [activeView, setActiveView] = useState('dashboard'); // 'dashboard', 'content', 'sources', 'graph', 'sentiment', 'clusters'
   const [filterSourceId, setFilterSourceId] = useState('');
   const [filters, setFilters] = useState({
     sentiment: [],
@@ -147,6 +148,20 @@ function App() {
           <nav className="flex space-x-8 overflow-x-auto">
             <button
               onClick={() => {
+                setActiveView('dashboard');
+                setFilterSourceId('');
+                setFilters({ ...filters, sourceId: '' });
+              }}
+              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeView === 'dashboard'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => {
                 setActiveView('content');
                 setFilterSourceId('');
                 setFilters({ ...filters, sourceId: '' });
@@ -209,6 +224,10 @@ function App() {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {activeView === 'dashboard' && (
+          <MarketSentimentDashboard content={content} />
+        )}
+
         {activeView === 'content' && (
           <>
             <ContentForm onSubmit={handleAddContent} sources={sources} />
