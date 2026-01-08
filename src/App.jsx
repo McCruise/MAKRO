@@ -10,6 +10,7 @@ import SentimentAggregation from './components/SentimentAggregation';
 import NarrativeClusters from './components/NarrativeClusters';
 import MarketSentimentDashboard from './components/MarketSentimentDashboard';
 import NarrativeIntelligenceView from './components/NarrativeIntelligenceView';
+import RSSFetcher from './components/RSSFetcher';
 import { loadContent, saveContent, loadSources, saveSources, generateId } from './utils/storage';
 
 function App() {
@@ -69,6 +70,18 @@ function App() {
     };
 
     setContent((prev) => [newContent, ...prev]);
+  };
+
+  const handleRSSArticlesFetched = (articles) => {
+    // Add fetched articles to content
+    const newContentItems = articles.map(article => ({
+      ...article,
+      id: article.id || generateId(),
+      createdAt: article.createdAt || Date.now(),
+      updatedAt: Date.now(),
+    }));
+
+    setContent((prev) => [...newContentItems, ...prev]);
   };
 
   const handleAddSource = (formData) => {
@@ -250,6 +263,7 @@ function App() {
 
         {activeView === 'content' && (
           <>
+            <RSSFetcher onArticlesFetched={handleRSSArticlesFetched} sources={sources} />
             <ContentForm onSubmit={handleAddContent} sources={sources} />
             
             <ContentFilters
