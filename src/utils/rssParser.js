@@ -212,55 +212,100 @@ export async function fetchMultipleFeeds(feedUrls) {
 
 /**
  * Predefined RSS feed sources
- * Using more accessible/public RSS feeds
+ * Focused on macro outlook and economic analysis
  */
 export const RSS_SOURCES = [
-  {
-    id: 'reuters',
-    name: 'Reuters Business',
-    url: 'https://feeds.reuters.com/reuters/businessNews',
-    category: 'Business',
-  },
-  {
-    id: 'reuters-markets',
-    name: 'Reuters Markets',
-    url: 'https://feeds.reuters.com/reuters/marketsNews',
-    category: 'Markets',
-  },
+  // Central Banks (most relevant for macro)
   {
     id: 'fed',
-    name: 'Federal Reserve',
+    name: 'Federal Reserve Press Releases',
     url: 'https://www.federalreserve.gov/feeds/press_all.xml',
     category: 'Central Bank',
+    priority: 'high',
   },
   {
     id: 'ecb',
     name: 'ECB Press Releases',
     url: 'https://www.ecb.europa.eu/rss/press.html',
     category: 'Central Bank',
+    priority: 'high',
   },
   {
-    id: 'yahoo-finance',
-    name: 'Yahoo Finance',
-    url: 'https://feeds.finance.yahoo.com/rss/2.0/headline?s=^DJI&region=US&lang=en-US',
+    id: 'boe',
+    name: 'Bank of England',
+    url: 'https://www.bankofengland.co.uk/rss/news',
+    category: 'Central Bank',
+    priority: 'high',
+  },
+  
+  // Economic News & Analysis
+  {
+    id: 'reuters-business',
+    name: 'Reuters Business',
+    url: 'https://feeds.reuters.com/reuters/businessNews',
+    category: 'Business',
+    priority: 'high',
+  },
+  {
+    id: 'reuters-markets',
+    name: 'Reuters Markets',
+    url: 'https://feeds.reuters.com/reuters/marketsNews',
     category: 'Markets',
+    priority: 'medium',
   },
   {
-    id: 'cnbc',
-    name: 'CNBC Markets',
-    url: 'https://www.cnbc.com/id/100003114/device/rss/rss.html',
+    id: 'reuters-economy',
+    name: 'Reuters Economy',
+    url: 'https://feeds.reuters.com/reuters/businessNews',
+    category: 'Economy',
+    priority: 'high',
+  },
+  
+  // Financial News with Macro Focus
+  {
+    id: 'ft-markets',
+    name: 'Financial Times Markets',
+    url: 'https://www.ft.com/markets?format=rss',
     category: 'Markets',
+    priority: 'high',
   },
   {
-    id: 'marketwatch',
-    name: 'MarketWatch',
+    id: 'wsj-markets',
+    name: 'WSJ Markets',
+    url: 'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',
+    category: 'Markets',
+    priority: 'medium',
+  },
+  {
+    id: 'bloomberg-economics',
+    name: 'Bloomberg Economics',
+    url: 'https://feeds.bloomberg.com/markets/news.rss',
+    category: 'Economics',
+    priority: 'high',
+  },
+  
+  // Economic Data & Analysis
+  {
+    id: 'marketwatch-economy',
+    name: 'MarketWatch Economy',
     url: 'https://www.marketwatch.com/rss/topstories',
-    category: 'Finance',
+    category: 'Economy',
+    priority: 'medium',
   },
   {
-    id: 'investing',
-    name: 'Investing.com',
-    url: 'https://www.investing.com/rss/news.rss',
-    category: 'Markets',
+    id: 'cnbc-economy',
+    name: 'CNBC Economy',
+    url: 'https://www.cnbc.com/id/100003114/device/rss/rss.html',
+    category: 'Economy',
+    priority: 'medium',
+  },
+  
+  // Alternative Sources
+  {
+    id: 'seeking-alpha',
+    name: 'Seeking Alpha Macro',
+    url: 'https://seekingalpha.com/feed.xml',
+    category: 'Analysis',
+    priority: 'medium',
   },
 ];
